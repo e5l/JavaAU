@@ -3,7 +3,7 @@ package ru.spbau.hw1.Trie;
 import java.util.HashMap;
 
 public class TrieImpl implements Trie {
-    private HashMap<Character, TrieImpl> dict = new HashMap<>();
+    private final HashMap<Character, TrieImpl> dict = new HashMap<>();
     private int size = 0;
     private boolean terminal = false;
 
@@ -16,7 +16,6 @@ public class TrieImpl implements Trie {
             return false;
         }
 
-        boolean inserted = false;
         TrieImpl tmp = this;
 
         for (int i = 0; i < element.length(); i++) {
@@ -47,7 +46,15 @@ public class TrieImpl implements Trie {
             return false;
         }
 
-        find(element).terminal = false;
+        TrieImpl tmp = this;
+        for (int i = 0; i < element.length(); i++) {
+            char elem = element.charAt(i);
+            tmp.size--;
+            tmp = tmp.dict.get(elem);
+        }
+
+        tmp.size--;
+        tmp.terminal = false;
         return true;
     }
 
