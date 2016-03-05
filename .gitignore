@@ -13,3 +13,4 @@ hs_err_pid*
 gradle-sample.iml
 Trie/.gradle
 Trie/build
+Trie/.idea

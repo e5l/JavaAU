@@ -3,6 +3,10 @@ package ru.spbau.hw1.Trie;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -94,6 +98,24 @@ public class TrieImplTest {
         assertEquals(2, tmp.howManyStartsWithPrefix("Hello"));
         assertEquals(1, tmp.howManyStartsWithPrefix("Hello "));
         assertEquals(1, tmp.howManyStartsWithPrefix("Hello world"));
+    }
+
+    @Test
+    public void testSimpleSerialization() throws IOException {
+        Trie trie = instance();
+
+        assertTrue(trie.add("abc"));
+        assertTrue(trie.add("cde"));
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ((StreamSerializable) trie).serialize(outputStream);
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        Trie newTrie = instance();
+        ((StreamSerializable) newTrie).deserialize(inputStream);
+
+        assertTrue(newTrie.contains("abc"));
+        assertTrue(newTrie.contains("cde"));
     }
 
     public static Trie instance() {
