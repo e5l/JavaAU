@@ -7,9 +7,6 @@ public class TrieImpl implements Trie {
     private int size = 0;
     private boolean terminal = false;
 
-    public TrieImpl() {
-    }
-
     @Override
     public boolean add(String element) {
         if (contains(element)) {
