@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -16,7 +17,7 @@ public class TrieImplTest {
 
     @Before
     public void runBefore() throws Exception {
-        tmp = instance();
+        tmp = new TrieImpl();
         tmp.add("Hello");
         tmp.add("World");
         tmp.add("Hell");
@@ -26,11 +27,11 @@ public class TrieImplTest {
     @Test
     public void testAdd() throws Exception {
         assertTrue(tmp.add("Some"));
-        assertTrue(!tmp.add("Some"));
-        assertTrue(!tmp.add("Some"));
+        assertFalse(tmp.add("Some"));
+        assertFalse(tmp.add("Some"));
         assertTrue(tmp.add("some"));
-        assertTrue(!tmp.add("some"));
-        assertTrue(!tmp.add("some"));
+        assertFalse(tmp.add("some"));
+        assertFalse(tmp.add("some"));
 
         assertTrue(tmp.add("creepy"));
         assertTrue(tmp.add("creepy word"));
@@ -40,14 +41,14 @@ public class TrieImplTest {
         assertTrue(tmp.contains("Some"));
         assertTrue(tmp.contains("some"));
         assertTrue(tmp.contains("creepy"));
-        assertTrue(!tmp.contains("casdasd"));
-        assertTrue(!tmp.contains("Some "));
+        assertFalse(tmp.contains("casdasd"));
+        assertFalse(tmp.contains("Some "));
 
     }
 
     @Test
     public void testSimple() {
-        Trie trie = instance();
+        Trie trie = new TrieImpl();
 
         assertTrue(trie.add("abc"));
         assertTrue(trie.contains("abc"));
@@ -59,8 +60,8 @@ public class TrieImplTest {
     public void testContains() throws Exception {
         assertTrue(tmp.contains("Hell"));
         assertTrue(tmp.contains("Hello world"));
-        assertTrue(!tmp.contains("Hi"));
-        assertTrue(!tmp.contains("Hello "));
+        assertFalse(tmp.contains("Hi"));
+        assertFalse(tmp.contains("Hello "));
     }
 
     @Test
@@ -70,14 +71,14 @@ public class TrieImplTest {
         assertTrue(tmp.remove("Hello"));
         assertEquals(3, tmp.size());
 
-        assertTrue(!tmp.remove("sjfklsfd"));
+        assertFalse(tmp.remove("sjfklsfd"));
         assertEquals(3, tmp.size());
 
         assertTrue(tmp.contains("Hell"));
-        assertTrue(!tmp.contains("Hi"));
-        assertTrue(!tmp.contains("Hello"));
+        assertFalse(tmp.contains("Hi"));
+        assertFalse(tmp.contains("Hello"));
 
-        Trie set = instance();
+        Trie set = new TrieImpl();
         String s = "string";
 
         assertTrue(set.add(s));
@@ -102,7 +103,7 @@ public class TrieImplTest {
 
     @Test
     public void testSimpleSerialization() throws IOException {
-        Trie trie = instance();
+        Trie trie = new TrieImpl();
 
         assertTrue(trie.add("abc"));
         assertTrue(trie.add("cde"));
@@ -111,20 +112,11 @@ public class TrieImplTest {
         ((StreamSerializable) trie).serialize(outputStream);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        Trie newTrie = instance();
+        Trie newTrie = new TrieImpl();
         ((StreamSerializable) newTrie).deserialize(inputStream);
 
         assertTrue(newTrie.contains("abc"));
         assertTrue(newTrie.contains("cde"));
     }
-
-    public static Trie instance() {
-        try {
-            return (Trie) Class.forName("ru.spbau.hw1.Trie.TrieImpl").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
 
 }
