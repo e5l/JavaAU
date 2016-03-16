@@ -1,10 +1,7 @@
 package ru.spbau.hw1.Trie;
 
-import org.json.JSONObject;
-
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class TrieImpl implements Trie, StreamSerializable {
@@ -73,54 +70,41 @@ public class TrieImpl implements Trie, StreamSerializable {
 
     @Override
     public void serialize(OutputStream out) throws IOException {
-        JSONObject j = new JSONObject(this);
-        out.write(j.toString().getBytes());
+        DataOutputStream stream = new DataOutputStream(out);
+        serializeImpl(stream);
     }
 
     @Override
     public void deserialize(InputStream in) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        DataInputStream stream = new DataInputStream(in);
+        deserializeImpl(stream);
+    }
 
-        StringBuilder builder = new StringBuilder();
-        String str = reader.readLine();
-        while (str != null) {
-            builder.append(str);
-            str = reader.readLine();
+    private void serializeImpl(DataOutputStream stream) throws IOException {
+        stream.write(size);
+        stream.writeBoolean(terminal);
+        stream.write(dict.size());
+
+        for (HashMap.Entry<Character, TrieImpl> child : dict.entrySet()) {
+            stream.writeChar(child.getKey());
+            child.getValue().serializeImpl(stream);
         }
-
-        JSONObject state = new JSONObject(builder.toString());
-        fromJSON(state);
     }
 
-    public int getSize() {
-        return size;
-    }
+    private void deserializeImpl(DataInputStream stream) throws IOException {
+        size = stream.read();
+        terminal = stream.readBoolean();
 
-    public HashMap<Character, TrieImpl> getDict() {
-        return dict;
-    }
+        int dictSize = stream.read();
 
-    public boolean getTerminal() {
-        return terminal;
-    }
+        for (int i = 0; i < dictSize; ++i) {
+            char key = stream.readChar();
 
-    private void fromJSON(JSONObject json) {
-        terminal = json.getBoolean("terminal");
-        size = json.getInt("size");
-        dict.clear();
+            TrieImpl value = new TrieImpl();
+            value.deserializeImpl(stream);
 
-        JSONObject kids = json.getJSONObject("dict");
-        Iterator<String> i = kids.keys();
-
-        while (i.hasNext()) {
-            String key = i.next();
-
-            TrieImpl kid = new TrieImpl();
-            kid.fromJSON(kids.getJSONObject(key));
-
-            dict.put(key.charAt(0), kid);
+            dict.put(key, value);
         }
-
     }
 
     private TrieImpl find(String element) {
@@ -134,8 +118,8 @@ public class TrieImpl implements Trie, StreamSerializable {
 
             tmp = tmp.dict.get(elem);
         }
-
         return tmp;
     }
+
 
 }
