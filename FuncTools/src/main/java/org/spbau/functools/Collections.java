@@ -21,8 +21,9 @@ public class Collections {
         ArrayList<A> result = new ArrayList<A>();
 
         for (A item : a) {
-            if (f.apply(item))
+            if (f.apply(item)) {
                 result.add(item);
+            }
         }
 
         return result;
@@ -32,8 +33,9 @@ public class Collections {
         ArrayList<A> result = new ArrayList<A>();
 
         for (A item : a) {
-            if (!f.apply(item))
+            if (!f.apply(item)) {
                 return result;
+            }
 
             result.add(item);
         }
