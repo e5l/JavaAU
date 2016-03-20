@@ -117,6 +117,24 @@ public class TrieImplTest {
 
         assertTrue(newTrie.contains("abc"));
         assertTrue(newTrie.contains("cde"));
+
+        /* size test */
+        trie = new TrieImpl();
+        for (int i = 0; i < 10000; ++i)
+            assertTrue(trie.add(String.valueOf(i)));
+
+        outputStream = new ByteArrayOutputStream();
+        ((StreamSerializable) trie).serialize(outputStream);
+
+        inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        newTrie = new TrieImpl();
+        ((StreamSerializable) newTrie).deserialize(inputStream);
+
+        for (int i = 0; i < 10000; ++i)
+            assertTrue(newTrie.contains(String.valueOf(i)));
+
+        assertEquals(trie.size(), newTrie.size());
+
     }
 
 }

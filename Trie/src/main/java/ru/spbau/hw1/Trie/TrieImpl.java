@@ -81,9 +81,9 @@ public class TrieImpl implements Trie, StreamSerializable {
     }
 
     private void serializeImpl(DataOutputStream stream) throws IOException {
-        stream.write(size);
+        stream.writeInt(size);
         stream.writeBoolean(terminal);
-        stream.write(dict.size());
+        stream.writeInt(dict.size());
 
         for (HashMap.Entry<Character, TrieImpl> child : dict.entrySet()) {
             stream.writeChar(child.getKey());
@@ -92,10 +92,10 @@ public class TrieImpl implements Trie, StreamSerializable {
     }
 
     private void deserializeImpl(DataInputStream stream) throws IOException {
-        size = stream.read();
+        size = stream.readInt();
         terminal = stream.readBoolean();
 
-        int dictSize = stream.read();
+        int dictSize = stream.readInt();
 
         for (int i = 0; i < dictSize; ++i) {
             char key = stream.readChar();
