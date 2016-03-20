@@ -78,8 +78,6 @@ public class TrieImpl implements Trie, StreamSerializable {
     public void deserialize(InputStream in) throws IOException {
         DataInputStream stream = new DataInputStream(in);
         deserializeImpl(stream);
-
-        stream.flush();
     }
 
     private void serializeImpl(DataOutputStream stream) throws IOException {
@@ -91,6 +89,8 @@ public class TrieImpl implements Trie, StreamSerializable {
             stream.writeChar(child.getKey());
             child.getValue().serializeImpl(stream);
         }
+
+        stream.flush();
     }
 
     private void deserializeImpl(DataInputStream stream) throws IOException {
