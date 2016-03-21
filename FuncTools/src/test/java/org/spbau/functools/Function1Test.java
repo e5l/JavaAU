@@ -11,7 +11,6 @@ public class Function1Test {
 
         Base base = new Base();
         Derived derived = new Derived();
-        NotDerived notDerived = new NotDerived();
 
         Function1<Base, Boolean> first = a -> true;
         Function1<Derived, Boolean> second = a -> true;

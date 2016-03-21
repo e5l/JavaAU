@@ -10,7 +10,6 @@ public class Function2Test {
     public void apply() throws Exception {
         Base base = new Base();
         Derived derived = new Derived();
-        NotDerived notDerived = new NotDerived();
 
         Function2<Base, Base, Base> first = (a, b) -> a;
         Function2<Derived, Derived, Derived> second = (a, b) -> b;
@@ -22,6 +21,7 @@ public class Function2Test {
 
         /*
         // shouldn't apply
+        NotDerived notDerived = new NotDerived();
         first.apply(notDerived, notDerived);
         second.apply(base, base);
         */
@@ -60,7 +60,6 @@ public class Function2Test {
     public void bind1() throws Exception {
         Base base = new Base();
         Derived derived = new Derived();
-        NotDerived notDerived = new NotDerived();
 
         Function2<Base, Base, Base> first = (a, b) -> a;
         Function2<Derived, Derived, Derived> second = (a, b) -> b;
@@ -72,6 +71,7 @@ public class Function2Test {
 
         /*
         // shouldn't compile
+        NotDerived notDerived = new NotDerived();
         first.bind1(notDerived);
         second.bind1(base);
         */
@@ -88,7 +88,6 @@ public class Function2Test {
     public void bind2() throws Exception {
         Base base = new Base();
         Derived derived = new Derived();
-        NotDerived notDerived = new NotDerived();
 
         Function2<Base, Base, Base> first = (a, b) -> a;
         Function2<Derived, Derived, Derived> second = (a, b) -> b;
@@ -100,6 +99,7 @@ public class Function2Test {
 
         /*
         // shouldn't compile
+        NotDerived notDerived = new NotDerived();
         first.bind2(notDerived);
         second.bind2(base);
         */
@@ -117,10 +117,8 @@ public class Function2Test {
     public void curry() throws Exception {
         Base base = new Base();
         Derived derived = new Derived();
-        NotDerived notDerived = new NotDerived();
 
         Function2<Base, Base, Base> first = (a, b) -> a;
-        Function2<Derived, Derived, Derived> second = (a, b) -> b;
 
         first.curry().apply(base).apply(base);
         first.curry().apply(derived).apply(derived);
