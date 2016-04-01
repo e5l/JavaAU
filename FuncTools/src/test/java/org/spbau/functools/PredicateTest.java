@@ -14,6 +14,16 @@ public class PredicateTest {
         assertTrue(positive.or(negative).apply(2));
         assertTrue(positive.or(negative).apply(-2));
         assertFalse(positive.or(negative).apply(0));
+
+        Predicate<Integer> Fail = arg -> {
+            // shouldn't happen
+            assertTrue(false);
+            return false;
+        };
+
+        assertTrue(positive.or(Fail).apply(1));
+
+        assertTrue(negative.or(Predicate.ALWAYS_TRUE).apply(-1));
     }
 
     @Test
@@ -24,6 +34,15 @@ public class PredicateTest {
         assertFalse(positive.and(negative).apply(2));
         assertFalse(positive.and(negative).apply(-2));
         assertFalse(positive.and(negative).apply(0));
+
+        Predicate<Integer> Fail = arg -> {
+            // shouldn't happen
+            assertTrue(false);
+            return false;
+        };
+
+        assertFalse(negative.and(Fail).apply(1));
+        assertFalse(negative.and(Predicate.ALWAYS_FALSE).apply(-1));
     }
 
     @Test
@@ -34,5 +53,7 @@ public class PredicateTest {
         assertTrue(positive.and(negative).not().apply(2));
         assertTrue(positive.and(negative).not().apply(-2));
         assertTrue(positive.and(negative).not().apply(0));
+
+        assertTrue(Predicate.ALWAYS_FALSE.not().apply(0));
     }
 }

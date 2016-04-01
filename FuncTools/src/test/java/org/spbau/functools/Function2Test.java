@@ -104,7 +104,6 @@ public class Function2Test {
         second.bind2(base);
         */
 
-
         Function2<Integer, Integer, Integer> second_arg = (a, b) -> b;
         Function1<Integer, Integer> five = second_arg.bind2(5);
 
@@ -130,7 +129,6 @@ public class Function2Test {
         assertEquals(new Integer(11), bsum.curry().apply(3).apply(4));
     }
 
-    class Base {}
-    class Derived extends Base {}
-    class NotDerived {}
+    private class Base {}
+    private class Derived extends Base {}
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public class Collections {
 
     public static <A, R> List<R> map(Function1<? super A, R> f, Iterable<A> a) {
-        ArrayList<R> result = new ArrayList<R>();
+        ArrayList<R> result = new ArrayList<>();
 
         for (A item : a) {
             result.add(f.apply(item));
@@ -18,7 +18,7 @@ public class Collections {
     }
 
     public static <A> List<A> filter(Predicate<? super A> f, Iterable<A> a) {
-        ArrayList<A> result = new ArrayList<A>();
+        ArrayList<A> result = new ArrayList<>();
 
         for (A item : a) {
             if (f.apply(item)) {
@@ -30,7 +30,7 @@ public class Collections {
     }
 
     public static <A> List<A> takeWhile(Predicate<? super A> f, Iterable<A> a) {
-        ArrayList<A> result = new ArrayList<A>();
+        ArrayList<A> result = new ArrayList<>();
 
         for (A item : a) {
             if (!f.apply(item)) {

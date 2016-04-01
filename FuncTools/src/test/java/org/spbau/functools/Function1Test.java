@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class Function1Test {
 
     @Test
-    public void apply() throws Exception {
+    public void apply() {
 
         Base base = new Base();
         Derived derived = new Derived();
@@ -34,7 +34,7 @@ public class Function1Test {
     }
 
     @Test
-    public void compose() throws Exception {
+    public void compose() {
 
         Function1<Base, Base> first = a -> a;
         Function1<Derived, Derived> second = a -> a;
@@ -72,7 +72,6 @@ public class Function1Test {
         assertEquals(new Integer(10), sqr.compose(inc).apply(3));
     }
 
-    class Base {}
-    class Derived extends Base {}
-    class NotDerived {}
+    private class Base {}
+    private class Derived extends Base {}
 }
