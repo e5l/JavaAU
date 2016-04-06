@@ -35,6 +35,7 @@ public class CollectionsTest {
     public void filter() {
         ArrayList<Integer> input = new ArrayList<>();
         ArrayList<Integer> expected = new ArrayList<>();
+        ArrayList<Number> tensExpected = new ArrayList<>();
 
         for (int i = 0; i < 100; ++i) {
             input.add(-i);
@@ -45,12 +46,20 @@ public class CollectionsTest {
             if (i < 10) {
                 expected.add(i);
             }
+
+            if (i == 10) {
+                tensExpected.add(i);
+            }
         }
 
         Predicate<Integer> greater = a -> a < 10;
+        Predicate<Number> isTen = a -> a.equals(10);
+
         List<Integer> result = Collections.filter(greater, input);
+        List<Integer> tens = Collections.filter(isTen, input);
 
         assertEquals(expected, result);
+        assertEquals(tensExpected, tens);
     }
 
     @Test
@@ -67,9 +76,13 @@ public class CollectionsTest {
         }
 
         Predicate<Integer> greater = a -> a < 10;
+        Predicate<Number> notTen = a -> !a.equals(10);
+
         List<Integer> result = Collections.takeWhile(greater, input);
+        List<Integer> resultTens = Collections.takeWhile(notTen, input);
 
         assertEquals(expected, result);
+        assertEquals(expected, resultTens);
     }
 
     @Test
@@ -86,9 +99,13 @@ public class CollectionsTest {
         }
 
         Predicate<Integer> greater = a -> a >= 10;
+        Predicate<Number> notTen = a -> !a.equals(10);
+
         List<Integer> result = Collections.takeUnless(greater, input);
+        List<Integer> resultTens = Collections.takeWhile(notTen, input);
 
         assertEquals(expected, result);
+        assertEquals(expected, resultTens);
     }
 
     @Test

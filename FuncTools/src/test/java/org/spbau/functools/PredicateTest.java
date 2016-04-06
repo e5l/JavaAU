@@ -35,13 +35,12 @@ public class PredicateTest {
         assertFalse(positive.and(negative).apply(-2));
         assertFalse(positive.and(negative).apply(0));
 
-        Predicate<Integer> Fail = arg -> {
-            // shouldn't happen
-            assertTrue(false);
+        Predicate<Integer> fail = arg -> {
+            fail();
             return false;
         };
 
-        assertFalse(negative.and(Fail).apply(1));
+        assertFalse(negative.and(fail).apply(1));
         assertFalse(negative.and(Predicate.ALWAYS_FALSE).apply(-1));
     }
 
