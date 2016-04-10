@@ -63,7 +63,7 @@ public final class FirstPartTasks {
     // Альбом, в котором максимум рейтинга минимален
     // (если в альбоме нет ни одного трека, считать, что максимум рейтинга в нем --- 0)
     public static Optional<Album> minMaxRating(Stream<Album> albums) {
-        return albums.min(comparing(a -> a.getTracks()
+        return albums.min(comparingInt(a -> a.getTracks()
                                           .stream()
                                           .mapToInt(Track::getRating)
                                           .max()
@@ -72,12 +72,12 @@ public final class FirstPartTasks {
 
     // Список альбомов, отсортированный по убыванию среднего рейтинга его треков (0, если треков нет)
     public static List<Album> sortByAverageRating(Stream<Album> albums) {
-        return albums.sorted(comparing(a -> a.getTracks()
-                                             .stream()
-                                             .mapToDouble(Track::getRating)
-                                             .average()
-                                             .orElse(0), reverseOrder()))
+        return albums.sorted(Comparator.<Album>comparingDouble(a -> a.getTracks()
+                                                                     .stream()
+                                                                     .mapToDouble(Track::getRating)
+                                                                     .average().orElse(0)).reversed())
                      .collect(toList());
+
     }
 
     // Произведение всех чисел потока по модулю 'modulo'
