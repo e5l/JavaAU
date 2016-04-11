@@ -47,7 +47,7 @@ public final class SecondPartTasks {
             }
         }
 
-        int size = 100000000;
+        final int size = 100000000;
         return Stream.generate(() -> new Point(doubler.get(), doubler.get()))
                      .limit(size)
                      .filter(p -> p.x * p.x + p.y * p.y <= 1)
