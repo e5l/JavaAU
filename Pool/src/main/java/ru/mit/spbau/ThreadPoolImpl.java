@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ThreadPoolImpl implements ThreadPool {
@@ -39,26 +38,12 @@ public class ThreadPoolImpl implements ThreadPool {
         return result;
     }
 
-    @Override
-    public <R, T> LightFuture<R> addFuture(Function<? super T, R> function, LightFuture<T> parrent) {
-        final LightFutureImpl<R> result = new LightFutureImpl<>(this);
-
+    public void enqueue(Runnable task) {
         synchronized (tasks) {
-            tasks.add(() -> {
-                try {
-                    final T value = parrent.get();
-                    result.setResult(function.apply(value));
-                } catch (Exception e) {
-                    result.setError(e);
-                }
-            });
-
+            tasks.add(task);
             tasks.notify();
         }
-
-        return result;
     }
-
 
     @Override
     public void shutdown() throws InterruptedException {

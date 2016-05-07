@@ -38,13 +38,7 @@ public class ThreadPoolImplTest {
 
         assertEquals(100, final_result);
         assertEquals(100, (int) counter[0]);
-
     }
-
-    /* TODO tests
-     * 1. Exceptions
-     * 2. thenApply
-     */
 
     @Test
     public void checkThreadCount() throws InterruptedException {
@@ -75,9 +69,43 @@ public class ThreadPoolImplTest {
     public void checkThenApply() throws LightExecutionException, InterruptedException {
         final ThreadPool pool = new ThreadPoolImpl(10);
 
-        int result = pool.add(() -> 1).thenApply((i) -> i + 1).thenApply((i) -> i + 1).get();
+        int result = pool
+                .add(() -> 1)
+                .thenApply((i) -> i + 1)
+                .thenApply((i) -> i + 1)
+                .get();
+
+        pool.shutdown();
 
         assertEquals(3, result);
+    }
+
+    @Test
+    public void checkThenApplyBottleneck() throws InterruptedException {
+        final ThreadPool pool = new ThreadPoolImpl(2);
+        final Integer[] i = {1};
+
+        pool.add(() -> {
+            while (true) {
+                synchronized (i[0]) {
+                    if (i[0] == 2) {
+                        break;
+                    }
+                }
+            }
+
+            return 0;
+        }).thenApply((a) -> true);
+
+        pool.add(() -> {
+            synchronized (i[0]) {
+                i[0] = 2;
+            }
+
+            return 0;
+        });
+
+        pool.shutdown();
     }
 
     @Test(expected = LightExecutionException.class)
@@ -87,6 +115,8 @@ public class ThreadPoolImplTest {
         pool.add(() -> {
             throw new IllegalStateException();
         }).get();
+
+        pool.shutdown();
     }
 
     private final class Barrier {
